@@ -1,0 +1,2 @@
+squeryl-auth-module
+===================
