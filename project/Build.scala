@@ -5,7 +5,7 @@ object LiftModuleBuild extends Build {
 
   import BuildSettings._
 
-  val project = Project("lift-squerylauth", file("."))
+  val project = Project("squeryl-auth-module", file("."))
     .settings(basicSettings:_*)
     .settings(publishSettings:_*)
     .settings(libraryDependencies <++= (liftVersion) { liftVersion =>
@@ -14,7 +14,8 @@ object LiftModuleBuild extends Build {
         "net.liftweb" %% "lift-webkit" % liftVersion % "provided",
         "ch.qos.logback" % "logback-classic" % "1.0.3" % "provided",
         "org.scalatest" %% "scalatest" % "1.9.1" % "test",
-        "org.mindrot" % "jbcrypt" % "0.3m" % "compile"
+        "org.mindrot" % "jbcrypt" % "0.3m" % "compile",
+        "joda-time" % "joda-time" % "2.3" % "provided"
       )
     })
 }
