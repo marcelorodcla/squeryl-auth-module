@@ -11,6 +11,7 @@ import net.liftweb.squerylrecord.KeyedRecord
 import net.liftweb.record.field.{BooleanField, EmailField, LongField, StringField}
 import net.liftweb.util.FieldError
 import xml.UnprefixedAttribute
+import org.squeryl.Schema
 
 trait AuthUser {
   /*
@@ -223,5 +224,7 @@ trait ProtoAuthUserMeta[UserType <: SquerylAuthUser[UserType]]
   self: UserType =>
 
 }
+
+trait AuthUserSchema[UserType <: SquerylAuthUser[UserType]] extends Schema
 
 

@@ -101,6 +101,6 @@ object SimpleUser extends SimpleUser with MetaRecord[SimpleUser] with ProtoAuthU
   object regUser extends SessionVar[SimpleUser](currentUser openOr meta.createRecord)
 }
 
-object SimpleUserSchema extends Schema {
+object SimpleUserSchema extends AuthUserSchema[SimpleUser] {
   val users: Table[SimpleUser] = table("users")
 }
