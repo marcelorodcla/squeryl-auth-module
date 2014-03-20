@@ -17,7 +17,7 @@ import net.liftweb.squerylrecord.KeyedRecord
 trait SquerylMetaRecord[T, BaseRecord <: Record[BaseRecord] with KeyedRecord[T]] {
   self: BaseRecord =>
 
-  val table: Table[BaseRecord]
+  def table: Table[BaseRecord]
 
   def find(id: T): Box[BaseRecord] = table.lookup(id)
 

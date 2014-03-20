@@ -56,7 +56,7 @@ object Role extends Role with MetaRecord[Role] with SquerylMetaRecord[String, Ro
   val CAT_SYSTEM     = "system"
   val CAT_TEAM       = "team"
 
-  val table = DbSchema.roles
+  lazy val table = DbSchema.roles
 
   def findOrCreate(roleId: String): Role = find(roleId).openOr(createRecord.idField(roleId))
   def findOrCreateAndSave(roleId: String, category: String, perms: Permission*): Role = {

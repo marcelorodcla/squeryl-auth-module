@@ -12,10 +12,10 @@ import net.liftweb.squerylrecord.RecordTypeMode._
  * To change this template use File | Settings | File Templates.
  */
 object DbSchema extends Schema {
-  val permissions: Table[Permission] = table("permission")
-  val roles: Table[Role] = table("role")
-  val loginTokens: Table[LoginToken] = table("login_token")
-  val extSessions: Table[ExtSession] = table("ext_sesssion")
+  lazy val permissions: Table[Permission] = table("permission")
+  lazy val roles: Table[Role] = table("role")
+  lazy val loginTokens: Table[LoginToken] = table("login_token")
+  lazy val extSessions: Table[ExtSession] = table("ext_sesssion")
 
 
   val permissionsToRoles = manyToManyRelation(permissions, roles, "permission_role").via[PermissionRole]((p,r,pr) =>

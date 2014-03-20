@@ -26,7 +26,6 @@ object SquerylAuth extends Factory {
 
   // AuthUserMeta object
   val authUserMeta = new FactoryMaker[AuthUserMeta[_]](model.SimpleUser) {}
-  val authUserSchema = new FactoryMaker[AuthUserSchema[_]](model.SimpleUserSchema) {}
 
   // urls
   val indexUrl = new FactoryMaker[String]("/") {}

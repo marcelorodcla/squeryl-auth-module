@@ -1,6 +1,6 @@
 package net.liftmodules.squerylauth
 
-import model.DbSchema
+import model.{SimpleUserSchema, SimpleUser, DbSchema}
 import net.liftweb.util.StringHelpers
 import net.liftweb.common._
 import net.liftweb.http.{S, Req, LiftSession }
@@ -20,8 +20,8 @@ import org.scalatest.{WordSpec, BeforeAndAfterAll}
  */
 
 trait TestLiftSession {
-  def session = new LiftSession("", StringHelpers.randomString(20), Empty)
-  def inSession[T](a: => T): T = S.init(Req.nil, session) { a }
+  def liftSession = new LiftSession("", StringHelpers.randomString(20), Empty)
+  def inSession[T](a: => T): T = S.init(Req.nil, liftSession) { a }
 }
 
 trait SquerylTestKit extends BeforeAndAfterAll {
@@ -45,6 +45,8 @@ trait SquerylTestKit extends BeforeAndAfterAll {
       try {
         DbSchema.drop
         DbSchema.create
+        SimpleUserSchema.drop
+        SimpleUserSchema.create
       } catch {
         case e : Throwable =>
           throw e
@@ -54,6 +56,8 @@ trait SquerylTestKit extends BeforeAndAfterAll {
 
 
   override def beforeAll(configMap: Map[String, Any]) {
+    configureH2()
+    createDb()
     // define the dbs
     //    dbs foreach { case (id, srvr, name) =>
     //      MongoDB.defineDb(id, new Mongo(srvr), name)

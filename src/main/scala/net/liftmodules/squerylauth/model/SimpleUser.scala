@@ -22,10 +22,11 @@ class SimpleUser extends ProtoAuthUser[SimpleUser] {
 
 }
 
-object SimpleUser extends SimpleUser with MetaRecord[SimpleUser] with ProtoAuthUserMeta[SimpleUser] with SquerylMetaRecord[Long, SimpleUser] with Loggable {
-  val table = SimpleUserSchema.users
+object SimpleUser extends SimpleUser with MetaRecord[SimpleUser] with ProtoAuthUserMeta[SimpleUser] with Loggable {
 
   def findByStringId(id: String): Box[SimpleUser] = Helpers.asLong(id).flatMap(find(_))
+
+  def find(id: Long): Box[SimpleUser] = SimpleUserSchema.users.lookup(id)
 
   override def onLogOut: List[Box[SimpleUser] => Unit] = List(
     x => logger.debug("User.onLogOut called."),
@@ -55,7 +56,7 @@ object SimpleUser extends SimpleUser with MetaRecord[SimpleUser] with ProtoAuthU
       case Full(at) => find(at.userId.is).map(user => {
         if (user.validate.length == 0) {
           user.verified(true)
-          SimpleUser.save(user)
+          SimpleUserSchema.users.insertOrUpdate(user)
           logUserIn(user)
           LoginToken.delete_!(at)
           RedirectResponse(loginTokenAfterUrl)
@@ -104,9 +105,9 @@ object SimpleUser extends SimpleUser with MetaRecord[SimpleUser] with ProtoAuthU
     }
   }
 
-  override def findAllByUsername(username: String): List[SimpleUser] = table.where(_.username === username).toList
+  override def findAllByUsername(username: String): List[SimpleUser] = SimpleUserSchema.users.where(_.username === username).toList
 
-  override def findAllByEmail(email: String): List[SimpleUser] = table.where(_.email === email).toList
+  override def findAllByEmail(email: String): List[SimpleUser] = SimpleUserSchema.users.where(_.email === email).toList
 
   object regUser extends SessionVar[SimpleUser](currentUser openOr meta.createRecord)
 }

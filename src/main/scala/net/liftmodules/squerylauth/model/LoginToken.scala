@@ -32,7 +32,7 @@ object LoginToken extends LoginToken with MetaRecord[LoginToken] with SquerylMet
 
   private lazy val loginTokenUrl = SquerylAuth.loginTokenUrl.vend
   private lazy val loginTokenExpires = SquerylAuth.loginTokenExpires.vend
-  val table = DbSchema.loginTokens
+  lazy val table = DbSchema.loginTokens
 
   def url(inst: LoginToken): String = "%s%s?token=%s".format(S.hostAndPath, loginTokenUrl, inst.id.toString)
 

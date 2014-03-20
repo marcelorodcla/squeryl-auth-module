@@ -197,7 +197,7 @@ trait ProtoAuthUser[T <: ProtoAuthUser[T]] extends SquerylAuthUser[T] {
     override def displayName = "Verified"
   }
 
-  val password = new PasswordField(this, 8, 32) {
+  val password = new PasswordField(this, 8, 64) {
     override def displayName = "Password"
   }
 
@@ -221,7 +221,7 @@ trait ProtoAuthUser[T <: ProtoAuthUser[T]] extends SquerylAuthUser[T] {
     userRoles.flatMap(x => x.userPermissions)).toSet
   lazy val authRoles: Set[String] = userRoles.map(_.idField.get).toSet
 
-  lazy val fancyEmail = AuthUtil.fancyEmail(username.is, email.is)
+  def fancyEmail = AuthUtil.fancyEmail(username.is, email.is)
 
   def findAllByUsername(username: String): List[T]
   def findAllByEmail(email: String): List[T]

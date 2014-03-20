@@ -28,7 +28,7 @@ class Permission extends Record[Permission] with KeyedRecord[Long] {
 }
 
 object Permission extends Permission with MetaRecord[Permission] with SquerylMetaRecord[Long, Permission] with Loggable {
-  val table = DbSchema.permissions
+  lazy val table = DbSchema.permissions
   def createUserPermission(uid: Long, aPerm: APermission) = {
     createRecord.userId(uid).permission(aPerm.toString)
   }
@@ -40,5 +40,5 @@ object Permission extends Permission with MetaRecord[Permission] with SquerylMet
   def toAPermission(perm: Permission) = APermission.fromString(perm.permission.get)
   def fromAPermission(aPerm: APermission): Permission = Permission.createRecord.permission(aPerm.toString)
 
-  def userPermissions(uid: Long): List[APermission] = table.where(_.userId === uid).toList.map(toAPermission)
+  def userPermissions(uid: Long): List[APermission] = DbSchema.permissions.where(_.userId === uid).toList.map(toAPermission)
 }
