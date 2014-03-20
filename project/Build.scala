@@ -15,7 +15,8 @@ object LiftModuleBuild extends Build {
         "ch.qos.logback" % "logback-classic" % "1.0.3" % "provided",
         "org.scalatest" %% "scalatest" % "1.9.1" % "test",
         "org.mindrot" % "jbcrypt" % "0.3m" % "compile",
-        "joda-time" % "joda-time" % "2.3" % "provided"
+        "joda-time" % "joda-time" % "2.3" % "provided",
+        "com.h2database" % "h2" % "1.3.167"
       )
     })
 }
