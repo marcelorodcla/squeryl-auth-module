@@ -2,6 +2,7 @@ package net.liftmodules.squerylauth
 package model
 
 import org.squeryl.{Table, Schema}
+import net.liftweb.squerylrecord.RecordTypeMode._
 
 /**
  * Created with IntelliJ IDEA.
@@ -16,4 +17,7 @@ object DbSchema extends Schema {
   val loginTokens: Table[LoginToken] = table("login_token")
   val extSessions: Table[ExtSession] = table("ext_sesssion")
 
+
+  val permissionsToRoles = manyToManyRelation(permissions, roles, "permission_role").via[PermissionRole]((p,r,pr) =>
+    (pr.roleId === r.id , pr.permissionId === p.id))
 }

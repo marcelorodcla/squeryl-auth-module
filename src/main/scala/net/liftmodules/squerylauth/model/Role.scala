@@ -22,17 +22,14 @@ class Role extends Record[Role] with KeyedRecord[String] {
 
   val category = new StringField(this, 50)
 
-  //ToDo replations
-  val permissions: List[APermission] = Nil
-  /*
-  object permissions extends MappedOneToMany(Permission, Permission.roleId) {
-    def allPerms: List[APermission] = all.map(Permission.toAPermission)
-  } */
+  lazy val permissions = DbSchema.permissionsToRoles.right(this)
 
   override def equals(other: Any): Boolean = other match {
     case r: Role => r.idField.get == this.idField.get
     case _ => false
   }
+
+  def userPermissions = permissions.toList.map(Permission.toAPermission)
 
   def displayName() = S ? ("userClientConnection.role."+idField.get)
 

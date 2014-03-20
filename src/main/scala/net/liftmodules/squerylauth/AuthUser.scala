@@ -10,7 +10,7 @@ import net.liftweb.record.Record
 import net.liftweb.squerylrecord.KeyedRecord
 import net.liftweb.record.field.{BooleanField, EmailField, LongField, StringField}
 import net.liftweb.util.FieldError
-import xml.UnprefixedAttribute
+import xml.{Text, UnprefixedAttribute}
 import org.squeryl.Schema
 
 trait AuthUser {
@@ -151,19 +151,24 @@ trait SquerylAuthUser[T <: SquerylAuthUser[T]] extends Record[T] with KeyedRecor
 trait ProtoAuthUser[T <: ProtoAuthUser[T]] extends SquerylAuthUser[T] {
   self: T =>
 
-  import Helpers._
-
   val username = new StringField(this, 32) {
     override def displayName = "Username"
     override def setFilter = trim _ :: super.setFilter
 
-   // def valUnique(msg: => String)(value: String): List[FieldError] //ToDo
-     /*
+    def valUnique(msg: => String)(value: String): List[FieldError] = {
+      if (value.length > 0)
+        findAllByUsername(value).filterNot(_.idField.get == idField.get).map(u =>
+          FieldError(this, Text(msg))
+        )
+      else
+        Nil
+    }
+
     override def validations =
       valUnique("Another user is already using that username, please enter a different one") _ ::
         valMinLen(3, "Username must be at least 3 characters") _ ::
         valMaxLen(32, "Username must be less than 33 characters") _ ::
-        super.validations*/
+        super.validations
 
   }
 
@@ -174,16 +179,16 @@ trait ProtoAuthUser[T <: ProtoAuthUser[T]] extends SquerylAuthUser[T] {
     override def displayName = "Email"
     override def setFilter = trim _ :: toLower _ :: super.setFilter
 
-    //ToDo
-    /*
-    def valUnique(msg: => String)(value: String): List[FieldError] //ToDo
+    def valUnique(msg: => String)(value: String): List[FieldError] = {
+      findAllByEmail(value).filter(_.idField.get != idField.is).map(u =>
+        FieldError(this, Text(msg))
+      )
+    }
 
     override def validations =
       valUnique("That email address is already registered with us") _  ::
         valMaxLen(254, "Email must be 254 characters or less") _ ::
         super.validations
-        */
-
 
   }
 
@@ -212,10 +217,14 @@ trait ProtoAuthUser[T <: ProtoAuthUser[T]] extends SquerylAuthUser[T] {
   /**
    * Using a lazy val means the user has to be reloaded if the attached roles or permissions change.
    */
-  lazy val authPermissions: Set[APermission] = (Permission.userPermissions(idField.get) ::: userRoles.flatMap(_.permissions)).toSet
+  lazy val authPermissions: Set[APermission] = (Permission.userPermissions(idField.get) :::
+    userRoles.flatMap(x => x.userPermissions)).toSet
   lazy val authRoles: Set[String] = userRoles.map(_.idField.get).toSet
 
   lazy val fancyEmail = AuthUtil.fancyEmail(username.is, email.is)
+
+  def findAllByUsername(username: String): List[T]
+  def findAllByEmail(email: String): List[T]
 }
 
 trait ProtoAuthUserMeta[UserType <: SquerylAuthUser[UserType]]

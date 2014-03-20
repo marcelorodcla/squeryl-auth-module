@@ -9,10 +9,16 @@ import net.liftweb.record.field.LongField
 import lib.SquerylMetaRecord
 import net.liftweb.util.Helpers
 import org.squeryl.{Table, Schema}
+import net.liftweb.squerylrecord.RecordTypeMode._
 
 class SimpleUser extends ProtoAuthUser[SimpleUser] {
   val idField = new LongField(this)
+
   def meta = SimpleUser
+
+  def findAllByUsername(username: String): List[SimpleUser] = meta.findAllByUsername(username)
+
+  def findAllByEmail(email: String): List[SimpleUser] = meta.findAllByEmail(email)
 
 }
 
@@ -98,9 +104,14 @@ object SimpleUser extends SimpleUser with MetaRecord[SimpleUser] with ProtoAuthU
     }
   }
 
+  override def findAllByUsername(username: String): List[SimpleUser] = table.where(_.username === username).toList
+
+  override def findAllByEmail(email: String): List[SimpleUser] = table.where(_.email === email).toList
+
   object regUser extends SessionVar[SimpleUser](currentUser openOr meta.createRecord)
 }
 
 object SimpleUserSchema extends AuthUserSchema[SimpleUser] {
   val users: Table[SimpleUser] = table("users")
+
 }

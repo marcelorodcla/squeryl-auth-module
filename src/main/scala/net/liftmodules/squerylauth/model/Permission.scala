@@ -22,7 +22,9 @@ class Permission extends Record[Permission] with KeyedRecord[Long] {
 
   val permission = new StringField(this, 1024)
 
-  //ToDo relations
+  //ToDo lazy val users = DbSchema.usersToPermissions.right(this)
+  lazy val roles = DbSchema.permissionsToRoles.left(this)
+
 }
 
 object Permission extends Permission with MetaRecord[Permission] with SquerylMetaRecord[Long, Permission] with Loggable {

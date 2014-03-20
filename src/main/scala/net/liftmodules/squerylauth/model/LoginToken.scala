@@ -13,6 +13,7 @@ import record.{MetaRecord, Record, MandatoryTypedField}
 import squerylrecord.KeyedRecord
 import lib.SquerylMetaRecord
 import net.liftweb.squerylrecord.RecordTypeMode._
+import util.Helpers
 
 /**
  * This is a token for automatically logging a user in
@@ -43,7 +44,5 @@ object LoginToken extends LoginToken with MetaRecord[LoginToken] with SquerylMet
     table.deleteWhere(_.userId === uid)
   }
 
-  def findByStringId(in: String): Box[LoginToken] = Empty //ToDo
-    /*if (ObjectId.isValid(in)) find(new ObjectId(in))
-    else Failure("Invalid ObjectId: "+in)*/
+  def findByStringId(in: String): Box[LoginToken] = Helpers.asLong(in).flatMap(find(_))
 }
