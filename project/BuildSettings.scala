@@ -7,12 +7,12 @@ object BuildSettings {
   val liftEdition = SettingKey[String]("liftEdition", "Lift Edition (short version number to append to artifact name)")
 
   val basicSettings = Defaults.defaultSettings ++ Seq(
-    name := "squerylauth",
+    moduleName := "squerylauth",
     organization := "net.liftmodules",
     version := "0.1-SNAPSHOT",
-    liftVersion <<= liftVersion ?? "2.5",
+    liftVersion <<= liftVersion ?? "2.6-M2",
     liftEdition <<= liftVersion apply { _.substring(0,3) },
-    name <<= (name, liftEdition) { (n, e) =>  n + "_" + e },
+    moduleName <<= (name, liftEdition) { (n, e) =>  n + "_" + e },
     scalaVersion := "2.10.0",
     crossScalaVersions := Seq("2.9.2", "2.9.1", "2.9.1-1", "2.10.0"),
     scalacOptions <<= scalaVersion map { sv: String =>
@@ -39,7 +39,7 @@ object BuildSettings {
     publishArtifact in Test := false,
     pomIncludeRepository := { _ => false },
     pomExtra := (
-      <url>https://github.com/jgenso/squeryl-auth-module</url>
+      <url>https://github.com/jgenso/squeryl-auth</url>
       <licenses>
         <license>
             <name>Apache 2.0 License</name>

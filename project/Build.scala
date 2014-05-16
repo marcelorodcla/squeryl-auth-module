@@ -5,7 +5,7 @@ object LiftModuleBuild extends Build {
 
   import BuildSettings._
 
-  val project = Project("squeryl-auth-module", file("."))
+  val project = Project("squerylauth", file("."))
     .settings(basicSettings:_*)
     .settings(publishSettings:_*)
     .settings(libraryDependencies <++= (liftVersion) { liftVersion =>
