@@ -8,7 +8,7 @@ object BuildSettings {
 
   val basicSettings = Defaults.defaultSettings ++ Seq(
     name := "squerylauth",
-    organization := "gensosrl",
+    organization := "net.liftmodules",
     version := "0.1-SNAPSHOT",
     liftVersion <<= liftVersion ?? "2.5",
     liftEdition <<= liftVersion apply { _.substring(0,3) },
