@@ -23,7 +23,7 @@ class LoginToken extends Record[LoginToken] with KeyedRecord[Long] {
 
   val idField = new LongField(this)
   val userId = new LongField(this)
-  val expires = new ExpiresField(this, meta.loginTokenExpires)
+  val expires = new ExpiresField(this, SquerylAuth.loginTokenExpires.vend)
 
   def url: String = meta.url(this)
 }
@@ -31,7 +31,6 @@ class LoginToken extends Record[LoginToken] with KeyedRecord[Long] {
 object LoginToken extends LoginToken with MetaRecord[LoginToken] with SquerylMetaRecord[Long, LoginToken] {
 
   private lazy val loginTokenUrl = SquerylAuth.loginTokenUrl.vend
-  private lazy val loginTokenExpires = SquerylAuth.loginTokenExpires.vend
   lazy val table = DbSchema.loginTokens
 
   def url(inst: LoginToken): String = "%s%s?token=%s".format(S.hostAndPath, loginTokenUrl, inst.id.toString)
