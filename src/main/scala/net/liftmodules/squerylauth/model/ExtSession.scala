@@ -23,7 +23,7 @@ class ExtSession extends Record[ExtSession] with KeyedRecord[UUID] {
   val idField = new UUIDField(this)
 
   val userId = new LongField(this, 0)
-  val expires = new ExpiresField(this, meta.whenExpires)
+  lazy val expires = new ExpiresField(this, meta.whenExpires)
 }
 
 object ExtSession extends ExtSession with MetaRecord[ExtSession] with SquerylMetaRecord[UUID, ExtSession] with Loggable {
