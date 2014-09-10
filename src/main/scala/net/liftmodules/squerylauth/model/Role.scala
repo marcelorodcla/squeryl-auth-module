@@ -17,10 +17,12 @@ class Role extends Record[Role] with KeyedRecord[String] {
   def meta = Role
 
   val idField = new StringField(this, 32) {
-    override def displayName = "Name"
+    override def displayName = S ? "Name"
   }
 
-  val category = new StringField(this, 50)
+  val category = new StringField(this, 50) {
+    override def displayName = S ? "Category"
+  }
 
   lazy val permissions = DbSchema.permissionsToRoles.right(this)
 
