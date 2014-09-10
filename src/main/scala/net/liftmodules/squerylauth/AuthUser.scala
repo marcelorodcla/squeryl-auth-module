@@ -139,7 +139,7 @@ trait UserLifeCycle[UserType <: AuthUser] {
 trait SquerylAuthUser[T <: SquerylAuthUser[T]] extends Record[T] with KeyedRecord[Long]  with AuthUser  {
   self: T =>
 
-  def userIdAsString: String = idField.is.toString
+  def userIdAsString: String = idField.get.toString
 
   val idField: LongField[T]
   val email: EmailField[T]
@@ -180,7 +180,7 @@ trait ProtoAuthUser[T <: ProtoAuthUser[T]] extends SquerylAuthUser[T] {
     override def setFilter = trim _ :: toLower _ :: super.setFilter
 
     def valUnique(msg: => String)(value: String): List[FieldError] = {
-      findAllByEmail(value).filter(_.idField.get != idField.is).map(u =>
+      findAllByEmail(value).filter(_.idField.get != idField.get).map(u =>
         FieldError(this, Text(msg))
       )
     }
@@ -221,7 +221,7 @@ trait ProtoAuthUser[T <: ProtoAuthUser[T]] extends SquerylAuthUser[T] {
     userRoles.flatMap(x => x.userPermissions)).toSet
   lazy val authRoles: Set[String] = userRoles.map(_.idField.get).toSet
 
-  def fancyEmail = AuthUtil.fancyEmail(username.is, email.is)
+  def fancyEmail = AuthUtil.fancyEmail(username.get, email.get)
 
   def findAllByUsername(username: String): List[T]
   def findAllByEmail(email: String): List[T]
