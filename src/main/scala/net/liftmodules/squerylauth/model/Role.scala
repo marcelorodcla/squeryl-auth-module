@@ -21,13 +21,15 @@ class Role extends Record[Role] with KeyedRecord[String] {
   def meta = Role
 
   val idField = new StringField(this, 32) {
-    val prevValue = get
     override def displayName = S ? "Name"
     override def validations: List[ValidationFunction] =
       valMaxLen(32, S.?("liftmodule-squerylauth.role.name.max.length.msg")) _ ::
       valMinLen(3, S.?("liftmodule-squerylauth.role.name.min.length.msg")) _ ::
-      meta.valUnique(S.?("liftmodule-squerylauth.role.name.unique.msg"), prevValue) _ ::
       super.validations
+    override def toForm = value match {
+      case "" => super.toForm
+      case _ => Full(super.toXHtml)
+    }
   }
 
   val category = new StringField(this, 50) {
@@ -86,12 +88,19 @@ object Role extends Role with MetaRecord[Role] with SquerylMetaRecord[String, Ro
   lazy val TeamMember  = Role.find(R_TEAM_MEMBER).openOrThrowException("No Member Role found")
   lazy val TeamWatcher = Role.find(R_TEAM_WATCHER).openOrThrowException("No Watcher Role found")
 
-  def valUnique(msg: => String, prevValue: String)(value: String): List[FieldError] =
-    find(value) match {
-      case Full(role) if prevValue == role.idField.get => Nil
+  def valUnique(inst: Role, msg: => String): List[FieldError] = {
+    find(inst.id) match {
+      case Full(role) if !inst.idField.dirty_? =>
+        Nil
       case Empty => Nil
       case _ => List(FieldError(idField, Text(msg)))
     }
+  }
+
+  override def validate(inst: Role) = {
+    meta.valUnique(inst, S.?("liftmodule-squerylauth.role.name.unique.msg")) ++
+    super.validate(inst)
+  }
 
 
 }
