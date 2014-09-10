@@ -41,6 +41,4 @@ object Permission extends Permission with MetaRecord[Permission] with SquerylMet
   def fromAPermission(aPerm: APermission): Permission = Permission.createRecord.permission(aPerm.toString)
 
   def userPermissions(uid: Long): List[APermission] = DbSchema.permissions.where(_.userId === uid).toList.map(toAPermission)
-
-  def all = table.toList
 }
