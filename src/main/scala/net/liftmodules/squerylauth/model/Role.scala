@@ -5,7 +5,7 @@ package model
 
 import net.liftweb.record.{MetaRecord, Record}
 import net.liftweb.squerylrecord.KeyedRecord
-import net.liftweb.common.{Full, Loggable}
+import net.liftweb.common.{Empty, Full, Loggable}
 import net.liftweb.record.field.StringField
 import net.liftweb.http.S
 import lib.SquerylMetaRecord
@@ -25,7 +25,7 @@ class Role extends Record[Role] with KeyedRecord[String] {
     override def displayName = S ? "Name"
     override def validations: List[ValidationFunction] =
       valMaxLen(32, S.?("liftmodule-squerylauth.role.name.max.length.msg")) _ ::
-      valMaxLen(32, S.?("liftmodule-squerylauth.role.name.min.length.msg")) _ ::
+      valMinLen(3, S.?("liftmodule-squerylauth.role.name.min.length.msg")) _ ::
       meta.valUnique(S.?("liftmodule-squerylauth.role.name.unique.msg"), prevValue) _ ::
       super.validations
   }
@@ -89,6 +89,7 @@ object Role extends Role with MetaRecord[Role] with SquerylMetaRecord[String, Ro
   def valUnique(msg: => String, prevValue: String)(value: String): List[FieldError] =
     find(value) match {
       case Full(role) if prevValue == role.idField.get => Nil
+      case Empty => Nil
       case _ => List(FieldError(idField, Text(msg)))
     }
 

@@ -19,12 +19,12 @@ trait SquerylMetaRecord[T, BaseRecord <: Record[BaseRecord] with KeyedRecord[T]]
 
   def table: Table[BaseRecord]
 
-  def find(id: T): Box[BaseRecord] = table.lookup(id)
+  def find(id: T): Box[BaseRecord] = inTransaction(table.lookup(id))
 
-  def findAll: List[BaseRecord] = table.toList
+  def findAll: List[BaseRecord] = inTransaction(table.toList)
 
-  def save(inst: BaseRecord) = table.insertOrUpdate(inst)
+  def save(inst: BaseRecord) = inTransaction(table.insertOrUpdate(inst))
 
-  def delete_!(inst: BaseRecord) = table.delete(inst.id)
+  def delete_!(inst: BaseRecord) = inTransaction(table.delete(inst.id))
 
 }
