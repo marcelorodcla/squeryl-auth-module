@@ -152,7 +152,7 @@ trait ProtoAuthUser[T <: ProtoAuthUser[T]] extends SquerylAuthUser[T] {
   self: T =>
 
   val username = new StringField(this, 32) {
-    override def displayName = "Username"
+    override def displayName = S ? "Username"
     override def setFilter = trim _ :: super.setFilter
 
     def valUnique(msg: => String)(value: String): List[FieldError] = {
@@ -176,7 +176,7 @@ trait ProtoAuthUser[T <: ProtoAuthUser[T]] extends SquerylAuthUser[T] {
   * http://www.dominicsayers.com/isemail/
   */
   val email = new EmailField(this, 254) {
-    override def displayName = "Email"
+    override def displayName = S ? "Email"
     override def setFilter = trim _ :: toLower _ :: super.setFilter
 
     def valUnique(msg: => String)(value: String): List[FieldError] = {
@@ -194,11 +194,11 @@ trait ProtoAuthUser[T <: ProtoAuthUser[T]] extends SquerylAuthUser[T] {
 
   // email address has been verified by clicking on a LoginToken link
   val verified = new BooleanField(this) {
-    override def displayName = "Verified"
+    override def displayName = S ? "Verified"
   }
 
   val password = new PasswordField(this, 8, 64) {
-    override def displayName = "Password"
+    override def displayName = S ? "Password"
   }
 
   //ToDo relations
