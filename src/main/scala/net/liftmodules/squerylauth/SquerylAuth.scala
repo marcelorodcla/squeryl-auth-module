@@ -37,6 +37,8 @@ object SquerylAuth extends Factory {
   val siteName = new FactoryMaker[String]("Example") {}
   val systemEmail = new FactoryMaker[String]("info@example.com") {}
   val systemUsername = new FactoryMaker[String]("Example Staff") {}
+  //For support of postgres schemas
+  val schemaName = new FactoryMaker[Option[String]](None) {}
 
   def systemFancyEmail = AuthUtil.fancyEmail(systemUsername.vend, systemEmail.vend)
 

@@ -12,6 +12,7 @@ import net.liftweb.squerylrecord.RecordTypeMode._
  * To change this template use File | Settings | File Templates.
  */
 object DbSchema extends Schema {
+  override def name = SquerylAuth.schemaName.vend
   val extSessions: Table[ExtSession] = table("ext_sesssion")
   val permissions: Table[Permission] = table("permission")
   val roles: Table[Role] = table("role")
