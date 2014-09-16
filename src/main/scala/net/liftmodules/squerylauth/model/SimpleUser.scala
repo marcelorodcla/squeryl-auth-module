@@ -10,8 +10,10 @@ import lib.SquerylMetaRecord
 import net.liftweb.util.Helpers
 import org.squeryl.{Table, Schema}
 import net.liftweb.squerylrecord.RecordTypeMode._
+import org.squeryl.annotations.Column
 
 class SimpleUser extends ProtoAuthUser[SimpleUser] {
+  @Column("id")
   val idField = new LongField(this)
 
   def meta = SimpleUser

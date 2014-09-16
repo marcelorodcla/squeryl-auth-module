@@ -16,10 +16,12 @@ import record.{MetaRecord, Record}
 import squerylrecord.KeyedRecord
 import util.{Helpers, LoanWrapper}
 import lib.SquerylMetaRecord
+import org.squeryl.annotations.Column
 
 class ExtSession extends Record[ExtSession] with KeyedRecord[UUID] {
   def meta = ExtSession
 
+  @Column("id")
   val idField = new UUIDField(this)
 
   val userId = new LongField(this, 0)

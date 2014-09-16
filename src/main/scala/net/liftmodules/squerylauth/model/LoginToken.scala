@@ -14,6 +14,7 @@ import squerylrecord.KeyedRecord
 import lib.SquerylMetaRecord
 import net.liftweb.squerylrecord.RecordTypeMode._
 import util.Helpers
+import org.squeryl.annotations.Column
 
 /**
  * This is a token for automatically logging a user in
@@ -21,6 +22,7 @@ import util.Helpers
 class LoginToken extends Record[LoginToken] with KeyedRecord[Long] {
   def meta = LoginToken
 
+  @Column("id")
   val idField = new LongField(this)
   val userId = new LongField(this)
   val expires = new ExpiresField(this, SquerylAuth.loginTokenExpires.vend)

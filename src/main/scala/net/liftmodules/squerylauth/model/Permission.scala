@@ -7,10 +7,12 @@ import net.liftweb.record.field.{OptionalLongField, StringField, LongField}
 import net.liftweb.common.Loggable
 import lib.SquerylMetaRecord
 import net.liftweb.squerylrecord.RecordTypeMode._
+import org.squeryl.annotations.Column
 
 class Permission extends Record[Permission] with KeyedRecord[Long] {
   def meta = Permission
 
+  @Column("id")
   val idField = new LongField(this)
 
   val roleId = new StringField(this, 32)

@@ -12,6 +12,7 @@ import lib.SquerylMetaRecord
 import net.liftweb.squerylrecord.RecordTypeMode._
 import net.liftweb.util._
 import scala.xml.Text
+import org.squeryl.annotations.Column
 
 /*
  * Simple record for storing roles. Role name is the PK.
@@ -20,6 +21,7 @@ import scala.xml.Text
 class Role extends Record[Role] with KeyedRecord[String] {
   def meta = Role
 
+  @Column("id")
   val idField = new StringField(this, 32) {
     override def displayName = S ? "Name"
     override def validations: List[ValidationFunction] =
