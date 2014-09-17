@@ -2,7 +2,7 @@ package net.liftmodules.squerylauth
 
 import field.PasswordField
 import lib.SquerylMetaRecord
-import model.{ExtSession, Permission, Role}
+import net.liftmodules.squerylauth.model.{RoleUser, ExtSession, Permission, Role}
 import net.liftweb.common._
 import net.liftweb.http.{CleanRequestVarOnSessionTransition, RequestVar, SessionVar, LiftResponse, S}
 import net.liftweb.util.Helpers
@@ -12,6 +12,8 @@ import net.liftweb.record.field.{BooleanField, EmailField, LongField, StringFiel
 import net.liftweb.util.FieldError
 import xml.{Text, UnprefixedAttribute}
 import org.squeryl.Schema
+import org.squeryl.dsl.{ManyToMany, OneToMany}
+import org.squeryl.Query
 
 trait AuthUser {
   /*
@@ -201,8 +203,7 @@ trait ProtoAuthUser[T <: ProtoAuthUser[T]] extends SquerylAuthUser[T] {
     override def displayName = S ? "Password"
   }
 
-  //ToDo relations
-  val userRoles: List[Role] = Nil
+  def roles: Query[Role] with ManyToMany[Role, RoleUser]
   //object userRoles extends MappedRole(this)
 
   //  object permissions extends MappedOneToMany(Permission, Permission.userId)
@@ -218,8 +219,8 @@ trait ProtoAuthUser[T <: ProtoAuthUser[T]] extends SquerylAuthUser[T] {
    * Using a lazy val means the user has to be reloaded if the attached roles or permissions change.
    */
   lazy val authPermissions: Set[APermission] = (Permission.userPermissions(idField.get) :::
-    userRoles.flatMap(x => x.userPermissions)).toSet
-  lazy val authRoles: Set[String] = userRoles.map(_.idField.get).toSet
+    roles.toList.flatMap(x => x.userPermissions)).toSet
+  lazy val authRoles: Set[String] = roles.map(_.idField.get).toSet
 
   def fancyEmail = AuthUtil.fancyEmail(username.get, email.get)
 

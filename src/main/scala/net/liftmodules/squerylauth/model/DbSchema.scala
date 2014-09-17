@@ -18,8 +18,6 @@ object DbSchema extends Schema {
   val roles: Table[Role] = table("role")
   val loginTokens: Table[LoginToken] = table("login_token")
 
-
-  val permissionsToRoles = manyToManyRelation(permissions, roles, "permission_role").via[PermissionRole]((p,r,pr) =>
-    (pr.roleId === r.id , pr.permissionId === p.id))
+  val roleToPermissions = oneToManyRelation(roles, permissions).via((r,p) => p.roleId === Option(r.id))
 
 }

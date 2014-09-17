@@ -3,7 +3,7 @@ package model
 
 import net.liftweb.record.{MetaRecord, Record}
 import net.liftweb.squerylrecord.KeyedRecord
-import net.liftweb.record.field.{OptionalLongField, StringField, LongField}
+import net.liftweb.record.field.{OptionalStringField, OptionalLongField, StringField, LongField}
 import net.liftweb.common.Loggable
 import lib.SquerylMetaRecord
 import net.liftweb.squerylrecord.RecordTypeMode._
@@ -15,7 +15,10 @@ class Permission extends Record[Permission] with KeyedRecord[Long] {
   @Column("id")
   val idField = new LongField(this)
 
-  val roleId = new StringField(this, 32)
+  /**
+   * This field is empty for permissions attached to a role
+   */
+  val roleId = new OptionalStringField(this, 32)
 
   /**
    * This field is empty for permissions attached to a role
@@ -25,7 +28,7 @@ class Permission extends Record[Permission] with KeyedRecord[Long] {
   val permission = new StringField(this, 1024)
 
   //ToDo lazy val users = DbSchema.usersToPermissions.right(this)
-  lazy val roles = DbSchema.permissionsToRoles.left(this)
+  lazy val roles = DbSchema.roleToPermissions.right(this)
 
 }
 

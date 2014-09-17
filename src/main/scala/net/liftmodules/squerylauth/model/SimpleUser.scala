@@ -16,6 +16,8 @@ class SimpleUser extends ProtoAuthUser[SimpleUser] {
   @Column("id")
   val idField = new LongField(this)
 
+  lazy val roles = SimpleUserSchema.rolesUsers.right(this)
+
   def meta = SimpleUser
 
   def findAllByUsername(username: String): List[SimpleUser] = meta.findAllByUsername(username)
@@ -55,7 +57,7 @@ object SimpleUser extends SimpleUser with MetaRecord[SimpleUser] with ProtoAuthU
         LoginToken.delete_!(at)
         RedirectWithState(indexUrl, RedirectState(() => { S.error(S ? "liftmodule-squerylauth.simpleUser.handleLoginToken.expiredToken") }))
       }
-      case Full(at) => find(at.userId.is).map(user => {
+      case Full(at) => find(at.userId.get).map(user => {
         if (user.validate.length == 0) {
           user.verified(true)
           SimpleUserSchema.users.insertOrUpdate(user)
@@ -79,7 +81,7 @@ object SimpleUser extends SimpleUser with MetaRecord[SimpleUser] with ProtoAuthU
   def sendLoginToken(user: SimpleUser): Unit = {
     import net.liftweb.util.Mailer._
 
-    val token = LoginToken.createForUserId(user.idField.is)
+    val token = LoginToken.createForUserId(user.idField.get)
 
     val msgTxt = S ? ( "liftmodule-squerylauth.simpleUser.sendLoginToken.msg", siteName, token.url, sysUsername)
 
@@ -99,7 +101,7 @@ object SimpleUser extends SimpleUser with MetaRecord[SimpleUser] with ProtoAuthU
       logger.debug("ExtSession currentUserId: "+currentUserId.toString)
       if (currentUserId.isEmpty) {
         ExtSession.handleExtSession match {
-          case Full(es) => find(es.userId.is).foreach { user => logUserIn(user, false) }
+          case Full(es) => find(es.userId.get).foreach { user => logUserIn(user, false) }
           case Failure(msg, _, _) => logger.warn("Error logging user in with ExtSession: %s".format(msg))
           case Empty => logger.warn("Unknown error logging user in with ExtSession: Empty")
         }
@@ -115,6 +117,11 @@ object SimpleUser extends SimpleUser with MetaRecord[SimpleUser] with ProtoAuthU
 }
 
 object SimpleUserSchema extends AuthUserSchema[SimpleUser] {
-  val users: Table[SimpleUser] = table("users")
+  val users: Table[SimpleUser] = table("user")
+
+  lazy val userToPermissions =
+    oneToManyRelation(users, DbSchema.permissions).via((r,p) => p.userId === Option(r.id))
+  val rolesUsers =
+    manyToManyRelation(DbSchema.roles, users, "role_user").via[RoleUser]((r,u,ru) => (ru.userId === u.id, r.id === ru.roleId))
 
 }

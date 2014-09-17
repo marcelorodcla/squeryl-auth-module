@@ -45,8 +45,10 @@ trait SquerylTestKit extends BeforeAndAfterAll {
       try {
         DbSchema.drop
         DbSchema.create
+        DbSchema.printDdl
         SimpleUserSchema.drop
         SimpleUserSchema.create
+        SimpleUserSchema.printDdl
       } catch {
         case e : Throwable =>
           throw e

@@ -38,8 +38,7 @@ class Role extends Record[Role] with KeyedRecord[String] {
     override def displayName = S ? "Category"
   }
 
-  def permissions = DbSchema.permissions.where(_.roleId === id).toList
-  //lazy val permissions = DbSchema.permissionsToRoles.right(this)
+  lazy val permissions = DbSchema.roleToPermissions.left(this)
 
   override def equals(other: Any): Boolean = other match {
     case r: Role => r.idField.get == this.idField.get
