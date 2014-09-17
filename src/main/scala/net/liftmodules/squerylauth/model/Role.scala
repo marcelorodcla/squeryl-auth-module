@@ -58,6 +58,8 @@ class Role extends Record[Role] with KeyedRecord[String] {
     <span class={cls}>{displayName}</span>
   }
 
+  override def toString = id
+
 }
 
 
