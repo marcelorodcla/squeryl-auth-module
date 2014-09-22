@@ -13,7 +13,7 @@ import net.liftweb.squerylrecord.RecordTypeMode._
  */
 object DbSchema extends Schema {
   override def name = SquerylAuth.schemaName.vend
-  val extSessions: Table[ExtSession] = table("ext_sesssion")
+  val extSessions: Table[ExtSession] = table("ext_session")
   val permissions: Table[Permission] = table("permission")
   val roles: Table[Role] = table("role")
   val loginTokens: Table[LoginToken] = table("login_token")
