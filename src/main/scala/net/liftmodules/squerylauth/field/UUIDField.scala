@@ -10,7 +10,7 @@ import net.liftweb.http.S
 import net.liftweb.record.{Record, Field, FieldHelpers, MandatoryTypedField}
 import net.liftweb.util.Helpers._
 import net.liftweb.squerylrecord.SquerylRecordField
-import net.liftweb.json.{JNothing => _, JNull => _, JString => _, JField => _, JObject => _, render => _, _}
+import net.liftweb.json.{JNothing => _, JNull => _, JString => _, JField => _, JObject => _, render => _, JValue => _, _}
 import JsonAST._
 
 class UUIDField[OwnerType <: Record[OwnerType]](rec: OwnerType)
