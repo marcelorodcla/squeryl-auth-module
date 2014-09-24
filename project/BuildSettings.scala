@@ -10,7 +10,7 @@ object BuildSettings {
     moduleName := "squerylauth",
     organization := "net.liftmodules",
     version := "0.1-SNAPSHOT",
-    liftVersion <<= liftVersion ?? "2.6-M2",
+    liftVersion <<= liftVersion ?? "2.6-M4",
     liftEdition <<= liftVersion apply { _.substring(0,3) },
     moduleName <<= (name, liftEdition) { (n, e) =>  n + "_" + e },
     scalaVersion := "2.10.4",
