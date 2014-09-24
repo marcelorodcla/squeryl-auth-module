@@ -14,7 +14,7 @@ object BuildSettings {
     liftEdition <<= liftVersion apply { _.substring(0,3) },
     moduleName <<= (name, liftEdition) { (n, e) =>  n + "_" + e },
     scalaVersion := "2.10.4",
-    crossScalaVersions := Seq("2.9.2", "2.9.1", "2.9.1-1", "2.10.4"),
+    crossScalaVersions := Seq("2.9.2", "2.9.1", "2.9.1-1", "2.10.4", "2.11.2"),
     scalacOptions <<= scalaVersion map { sv: String =>
       if (sv.startsWith("2.10."))
         Seq("-deprecation", "-unchecked", "-feature", "-language:postfixOps", "-language:implicitConversions")
