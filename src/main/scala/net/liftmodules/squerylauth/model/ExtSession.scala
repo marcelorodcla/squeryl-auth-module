@@ -30,7 +30,7 @@ class ExtSession extends Record[ExtSession] with KeyedRecord[UUID] {
 
 object ExtSession extends ExtSession with MetaRecord[ExtSession] with SquerylMetaRecord[UUID, ExtSession] with Loggable {
 
-  lazy val table = DbSchema.extSessions
+  lazy val table = SquerylAuthSchema.extSessions
   private lazy val whenExpires = SquerylAuth.extSessionExpires.vend
   private lazy val cookieName = SquerylAuth.extSessionCookieName.vend
   private lazy val cookiePath = SquerylAuth.extSessionCookiePath.vend

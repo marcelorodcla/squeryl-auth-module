@@ -120,8 +120,8 @@ object SimpleUserSchema extends AuthUserSchema[SimpleUser] {
   val users: Table[SimpleUser] = table("user")
 
   lazy val userToPermissions =
-    oneToManyRelation(users, DbSchema.permissions).via((r,p) => p.userId === Option(r.id))
+    oneToManyRelation(users, SquerylAuthSchema.permissions).via((r,p) => p.userId === Option(r.id))
   val rolesUsers =
-    manyToManyRelation(DbSchema.roles, users, "role_user").via[RoleUser]((r,u,ru) => (ru.userId === u.id, r.id === ru.roleId))
+    manyToManyRelation(SquerylAuthSchema.roles, users, "role_user").via[RoleUser]((r,u,ru) => (ru.userId === u.id, r.id === ru.roleId))
 
 }

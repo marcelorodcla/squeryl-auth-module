@@ -7,13 +7,6 @@ import net.liftweb.squerylrecord.RecordTypeMode._
 import net.liftweb.common._
 import net.liftweb.squerylrecord.KeyedRecord
 
-/**
- * Created with IntelliJ IDEA.
- * User: j2
- * Date: 20-03-14
- * Time: 01:21 PM
- * To change this template use File | Settings | File Templates.
- */
 trait SquerylMetaRecord[T, BaseRecord <: Record[BaseRecord] with KeyedRecord[T]] {
   self: BaseRecord =>
 

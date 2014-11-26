@@ -28,12 +28,12 @@ class Permission extends Record[Permission] with KeyedRecord[Long] {
   val permission = new StringField(this, 1024)
 
   //ToDo lazy val users = DbSchema.usersToPermissions.right(this)
-  lazy val roles = DbSchema.roleToPermissions.right(this)
+  lazy val roles = SquerylAuthSchema.roleToPermissions.right(this)
 
 }
 
 object Permission extends Permission with MetaRecord[Permission] with SquerylMetaRecord[Long, Permission] with Loggable {
-  lazy val table = DbSchema.permissions
+  lazy val table = SquerylAuthSchema.permissions
   def createUserPermission(uid: Long, aPerm: APermission) = {
     createRecord.userId(uid).permission(aPerm.toString)
   }
@@ -45,5 +45,5 @@ object Permission extends Permission with MetaRecord[Permission] with SquerylMet
   def toAPermission(perm: Permission) = APermission.fromString(perm.permission.get)
   def fromAPermission(aPerm: APermission): Permission = Permission.createRecord.permission(aPerm.toString)
 
-  def userPermissions(uid: Long): List[APermission] = DbSchema.permissions.where(_.userId === uid).toList.map(toAPermission)
+  def userPermissions(uid: Long): List[APermission] = SquerylAuthSchema.permissions.where(_.userId === uid).toList.map(toAPermission)
 }

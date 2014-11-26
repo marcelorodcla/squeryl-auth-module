@@ -1,6 +1,6 @@
 package net.liftmodules.squerylauth
 
-import model.{SimpleUserSchema, SimpleUser, DbSchema}
+import model.{SimpleUserSchema, SimpleUser, SquerylAuthSchema}
 import net.liftweb.util.StringHelpers
 import net.liftweb.common._
 import net.liftweb.http.{S, Req, LiftSession }
@@ -43,9 +43,9 @@ trait SquerylTestKit extends BeforeAndAfterAll {
   def createDb() {
     inTransaction {
       try {
-        DbSchema.drop
-        DbSchema.create
-        DbSchema.printDdl
+        SquerylAuthSchema.drop
+        SquerylAuthSchema.create
+        SquerylAuthSchema.printDdl
         SimpleUserSchema.drop
         SimpleUserSchema.create
         SimpleUserSchema.printDdl

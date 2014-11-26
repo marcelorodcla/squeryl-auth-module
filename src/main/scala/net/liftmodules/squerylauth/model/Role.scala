@@ -38,7 +38,7 @@ class Role extends Record[Role] with KeyedRecord[String] {
     override def displayName = S ? "Category"
   }
 
-  lazy val permissions = DbSchema.roleToPermissions.left(this)
+  lazy val permissions = SquerylAuthSchema.roleToPermissions.left(this)
 
   override def equals(other: Any): Boolean = other match {
     case r: Role => r.idField.get == this.idField.get
@@ -74,7 +74,7 @@ object Role extends Role with MetaRecord[Role] with SquerylMetaRecord[String, Ro
   val CAT_SYSTEM     = "system"
   val CAT_TEAM       = "team"
 
-  lazy val table = DbSchema.roles
+  lazy val table = SquerylAuthSchema.roles
 
   def findOrCreate(roleId: String): Role = find(roleId).openOr(createRecord.idField(roleId))
   def findOrCreateAndSave(roleId: String, category: String, perms: Permission*): Role = {
