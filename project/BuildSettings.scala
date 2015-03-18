@@ -9,14 +9,14 @@ object BuildSettings {
   val basicSettings = Defaults.defaultSettings ++ Seq(
     moduleName := "squerylauth",
     organization := "net.liftmodules",
-    version := "0.2-SNAPSHOT",
-    liftVersion <<= liftVersion ?? "2.6-RC1",
+    version := "0.2",
+    liftVersion <<= liftVersion ?? "2.6.1",
     liftEdition <<= liftVersion apply { _.substring(0,3) },
     moduleName <<= (name, liftEdition) { (n, e) =>  n + "_" + e },
-    scalaVersion := "2.10.4",
+    scalaVersion := "2.11.4",
     crossScalaVersions <<= liftEdition { le => le match {
       case "3.0" => Seq("2.11.2")
-      case _ => Seq("2.9.2", "2.9.1", "2.9.1-1", "2.10.4", "2.11.2")
+      case _ => Seq("2.9.2", "2.9.1", "2.9.1-1", "2.10.4", "2.11.4")
     }},
     scalacOptions <<= scalaVersion map { sv: String => sv match {
       case x if x.startsWith("2.9") => Seq("-deprecation", "-unchecked")
