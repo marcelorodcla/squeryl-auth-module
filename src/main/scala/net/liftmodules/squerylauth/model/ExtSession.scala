@@ -17,6 +17,7 @@ import squerylrecord.KeyedRecord
 import util.{Helpers, LoanWrapper}
 import lib.SquerylMetaRecord
 import org.squeryl.annotations.Column
+import net.liftweb.squerylrecord.RecordTypeMode._
 
 class ExtSession extends Record[ExtSession] with KeyedRecord[UUID] {
   def meta = ExtSession
