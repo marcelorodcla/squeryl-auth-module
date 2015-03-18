@@ -57,28 +57,12 @@ trait SquerylTestKit extends BeforeAndAfterAll {
   }
 
 
-  override def beforeAll(configMap: Map[String, Any]) {
+  override def beforeAll() = {
     configureH2()
     createDb()
-    // define the dbs
-    //    dbs foreach { case (id, srvr, name) =>
-    //      MongoDB.defineDb(id, new Mongo(srvr), name)
-    //    }
   }
 
-  override def afterAll(configMap: Map[String, Any]) {
-    //if (!debug) {
-      // drop the databases
-      //      dbs foreach { case (id, _, _) =>
-      //        MongoDB.use(id) { db => db.dropDatabase }
-      //      }
-    //}
-
-    // clear the mongo instances
-    //MongoDB.close
-    //for (sc <- SquerylRecord.) {
-    //  sc.connection.close()
-   // }
+  override def afterAll() = {
   }
 }
 
