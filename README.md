@@ -3,7 +3,7 @@
 
 Authentication and Authorization module for Lift-Squeryl.
 
-SquerylAUth is a port of Tim Nelson's [MongoAuth](https://github.com/eltimn/lift-mongoauth) module and Torsten Uhlmann's [MapperAuth](https://github.com/liftmodules/mapperauth) to Squeryl.
+SquerylAuth is a port of Tim Nelson's [MongoAuth](https://github.com/eltimn/lift-mongoauth) module and Torsten Uhlmann's [MapperAuth](https://github.com/liftmodules/mapperauth) to Squeryl.
 
 # Installation
 
@@ -126,4 +126,4 @@ _SquerylAuth_ as well as _lift-squeryl.g8_ are ported from Tim Nelson's [lift-mo
 
 # License
 
-Apache v2.0. See LICENSE.txt
+Apache v2.0. See LICENSE
